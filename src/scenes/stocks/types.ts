@@ -5,3 +5,9 @@ export interface Stock {
     previousPrice?: number;
     currentPrice?: number;
 }
+
+export enum PriceStatus {
+    SAME,
+    INCREASED,
+    DECREASED,
+}
