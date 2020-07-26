@@ -4,6 +4,7 @@ import { Stock } from './types';
 import StockItem from './components/StockItem';
 import { getRandomNumberBetween, getRandomBoolean, getTodaysDate } from '../../utils';
 import { createUseStyles } from 'react-jss';
+import LoadingSpinner from '../../components/Loading';
 
 
 const useStyles = createUseStyles({
@@ -18,6 +19,7 @@ const useStyles = createUseStyles({
     color: '#e5e5e5',
     borderRadius: '.5rem',
     padding: '.3rem 1rem',
+    marginLeft: '1rem',
   }
 });
 
@@ -26,9 +28,13 @@ function Stocks() {
 
   const [date, setDate] = useState<Date>(getTodaysDate());
   const [stocks, setStocks] = useState<Stock[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    getStocks().then((data) => setStocks(data))
+    getStocks().then((data) => {
+      setStocks(data);
+      setIsLoading(false);
+    })
   }, []);
 
   function getFormattedDate(): string {
@@ -85,13 +91,19 @@ function Stocks() {
 
   return (
     <>
-      <div className={classes.header}>
-        {`Day ${getDayNumber()}`}  | {getFormattedDate()}
-        <div className={classes.nextBtn} onClick={handleNextDayClick}>Next day</div>
-      </div>
-      <hr />
-      {stocks.map((stock: Stock) => <StockItem key={stock.symbol} stock={stock} />)}
-
+      {isLoading
+        ? <LoadingSpinner />
+        : (
+          <>
+            <div className={classes.header}>
+              {`Day ${getDayNumber()}`}  | {getFormattedDate()}
+              <div className={classes.nextBtn} onClick={handleNextDayClick}>Next day</div>
+            </div>
+            <hr />
+            {stocks.map((stock: Stock) => <StockItem key={stock.symbol} stock={stock} />)}
+          </>
+        )
+      }
     </>
   )
 }
