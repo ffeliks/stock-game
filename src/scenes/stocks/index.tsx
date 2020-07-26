@@ -3,8 +3,27 @@ import { getStocks } from './service';
 import { Stock } from './types';
 import StockItem from './components/StockItem';
 import { getRandomNumberBetween, getRandomBoolean, getTodaysDate } from '../../utils';
+import { createUseStyles } from 'react-jss';
+
+
+const useStyles = createUseStyles({
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  nextBtn: {
+    cursor: 'pointer',
+    backgroundColor: '#303960',
+    color: '#e5e5e5',
+    borderRadius: '.5rem',
+    padding: '.3rem 1rem',
+  }
+});
 
 function Stocks() {
+  const classes = useStyles();
+
   const [date, setDate] = useState<Date>(getTodaysDate());
   const [stocks, setStocks] = useState<Stock[]>([]);
 
@@ -66,10 +85,13 @@ function Stocks() {
 
   return (
     <>
-      {stocks.map((stock: Stock) => <StockItem key={stock.symbol} stock={stock} />)}
+      <div className={classes.header}>
+        {`Day ${getDayNumber()}`}  | {getFormattedDate()}
+        <div className={classes.nextBtn} onClick={handleNextDayClick}>Next day</div>
+      </div>
       <hr />
-      {`Day ${getDayNumber()}`}  | {getFormattedDate()}
-      <button onClick={handleNextDayClick}>Next day</button>
+      {stocks.map((stock: Stock) => <StockItem key={stock.symbol} stock={stock} />)}
+
     </>
   )
 }

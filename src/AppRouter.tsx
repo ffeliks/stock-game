@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import routes from './routes';
 import Page from './components/Page';
 import Stocks from './scenes/stocks';
-import PageNotFound from './scenes/404';
 
 function AppRouter() {
   return (
@@ -11,8 +10,7 @@ function AppRouter() {
       <Page>
         <Switch>
           <Route exact path={routes.STOCKS} component={Stocks} />
-          <Route exact path={routes.PAGE_NOT_FOUND} component={PageNotFound} />
-          <Redirect to={routes.PAGE_NOT_FOUND} />
+          <Redirect to={routes.STOCKS} />
         </Switch>
       </Page>
     </Router>

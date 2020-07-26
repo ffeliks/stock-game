@@ -7,6 +7,7 @@ const useStyles = createUseStyles({
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
+        backgroundColor: '#e5e5e5'
     }
 });
 

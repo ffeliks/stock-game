@@ -8,18 +8,45 @@ interface StockItemProps {
 
 const useStyles = createUseStyles({
     root: {
-        border: '1px solid black',
         margin: '.5rem',
-        padding: '1rem',
+        width: '28rem',
+        height: '3.5rem',
+        padding: '1.5rem',
+    },
+    symbolContainer: {
+        color: '#303960',
+        padding: '.3rem',
+        backgroundColor: '#f8b24f',
+        borderRadius: '.5rem .5rem 0 0',
+        width: '8rem',
+        textAlign: 'center',
+    },
+    stockContent: {
+        padding: '.5rem',
+        borderRadius: '0 .5rem .5rem .5rem',
+        backgroundColor: '#303960',
+        color: '#e5e5e5',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+    },
+    priceDiffContainer: {
+        width: '7rem',
+        textAlign: 'center',
+        padding: '.2rem 1rem',
+        borderRadius: '.5rem',
     },
     priceSame: {
-        color: 'gray',
+        color: '#303960',
+        backgroundColor: '#e5e5e5',
     },
     priceIncrease: {
-        color: 'green',
+        color: '#303960',
+        backgroundColor: '#A5FF8A',
     },
     priceDecrease: {
-        color: 'red',
+        color: 'white',
+        backgroundColor: '#e37a71',
     },
 });
 
@@ -29,6 +56,14 @@ function StockItem(props: StockItemProps) {
 
     function getCurrentPrice(): number {
         return stock.currentPrice ? stock.currentPrice : stock.price;
+    }
+
+    function getPercentageDifference(): string {
+        return Number((getNumericDifference() / getCurrentPrice()) * 100).toFixed(2) + '%';
+    }
+
+    function getNumericDifference(): number {
+        return Math.abs(getCurrentPrice() - stock.price);
     }
 
     function getPriceStatus(): PriceStatus {
@@ -41,14 +76,6 @@ function StockItem(props: StockItemProps) {
         } else {
             return PriceStatus.SAME;
         }
-    }
-
-    function getPercentageDifference(): string {
-        return Number((getNumericDifference() / getCurrentPrice()) * 100).toFixed(2) + '%';
-    }
-
-    function getNumericDifference(): number {
-        return Math.abs(getCurrentPrice() - stock.price);
     }
 
     function getPriceStatusColor(): string {
@@ -65,23 +92,21 @@ function StockItem(props: StockItemProps) {
 
     return (
         <div className={classes.root}>
-            <div>
-                Name: {stock.name}
+            <div className={`${classes.symbolContainer}`}>
+                {stock.symbol} - {`${getCurrentPrice()}$`}
             </div>
-            <div>
-                Symbol: {stock.symbol}
-            </div>
-            <div>
-                Initial value: {stock.price}
-            </div>
-            <div>
-                Current price: {getCurrentPrice()}
-            </div>
-            <div className={getPriceStatusColor()}>
-                Percentage diff: {getPercentageDifference()}
-            </div>
-            <div className={getPriceStatusColor()}>
-                Numeric diff: {getNumericDifference()}
+            <div className={classes.stockContent}>
+                <div>
+                    <div>
+                        {stock.name}
+                    </div>
+                    <div>
+                        Initial value: {`${stock.price}$`}
+                    </div>
+                </div>
+                <div className={`${classes.priceDiffContainer} ${getPriceStatusColor()}`}>
+                    {getPercentageDifference()}, {`${getNumericDifference()}$`}
+                </div>
             </div>
         </div>
     )
